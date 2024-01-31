@@ -1,0 +1,78 @@
+
+
+<!-- 
+
+    Description:
+
+        This is the view Public page of the website. 
+
+
+    Requirements:
+
+        CrowdedMarket will have a public view page that presents information about a
+        public file specified using the query string of an HTTP Request,
+            ◦ If the query string is invalid the public view page must present a file not found
+            error;
+            ◦ If the query string is valid the public view page must present:
+                ▪ the name of the file specified in the query string;
+                ▪ the date and time the file was uploaded represented by the timestamp
+                returned by the time function of the python time module ( time.time());
+                ▪ the comment associated with the file when it was uploaded;
+                ▪ a link where the file can be downloaded;
+                ▪ if the uploaded file was a jpeg image the file itself displayed as an image
+                on the page (you can feel free to provide previews of other file types, but
+                jpeg images identified by their file extension ‘.jpg’ must be supported);
+                ▪ an html pre element that displays an ascii art picture of a cow saying the
+                comment associated with the file;
+                • sudo apt install cowsay will install the extremely important cowsay
+                application used to generate these essential pictures;
+                • there is an example demoWWW page that calls a shell command and
+                inserts the results into the http response it generates; consider this
+                example and use it as a template for adding cowsay functionality to
+                your site; in your lab report ensure you discuss this example and any
+                changes you made to the code within it before adding cowsay
+                functionality to CrowdedMarket;
+
+
+    Author: OCdt Aaron Brown and OCdt Liethan Velasco
+    Version: 31 January 2024
+
+-->
+
+
+<!DOCTYPE html> 
+<html lang="en">
+
+    <!-- Specify header here -->
+    <head>
+
+        <meta charset="utf-8">
+        
+        <!-- Insert CSS file path here -->
+        <link rel="stylesheet" href="./css/index.css">
+
+    </head>
+
+    <!-- Design body here -->
+    <body>
+
+        <!-- Define outer div -->
+        <div class="OuterDiv">
+
+            <div class="PageTitle">
+                <h2>This is the view public page.</h2>
+            </div>
+
+            <div class="PageLinks">
+                <p>Here are some links to the website's other pages:</p>
+                <a href="index.html">Go Home.</a>
+            </div>
+
+            <div class="PageText">
+            </div>
+
+        </div>
+
+    </body>
+
+</html>
