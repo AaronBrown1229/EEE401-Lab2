@@ -52,12 +52,50 @@
 
             <div class="PageLinks">
                 <h4>Links to other pages:</h4>
-                <a href="index.html">Go Home.</a>
+                <a href="index.html">Go Home</a>
             </div>
 
             <div class="PageDesc">
                 <h4>Instructions:</h4>
-                <p>Upload some media here lol.</p>
+                <p>Hey fam upload some stuff here or something idk.</p>
+            </div>
+
+            <div class="UploadForm">
+
+                <div class="FormTitle">
+                    <p><b>Upload a File</b></p>
+                </div>
+
+                <!-- Insert form element here -->
+                <form action="upload_service.html">
+
+                    <div class="FileUploadBlock">
+                        <label for="file_data">Choose a file to upload:</label>
+                        <input type="file" id="file_data" name="file_data">
+                    </div>
+
+                    <div class="CommentBlock">
+                        <label for="comment">Upload with a comment: </label>
+                        <input type="text" id="comment" name="comment">
+                    </div>
+
+                    <div class="RadioButtons">
+                        <legend>Select an upload type:</legend>
+                        <div>
+                            <input type="radio" id="pub_or_priv" name="pub_or_priv" value="Private">
+                            <label for="pub_or_priv">Private</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="pub_or_priv" name="pub_or_priv" value="Public">
+                            <label for="pub_or_priv">Public</label>
+                        </div>
+                    </div>
+
+                    <div class="SubmitButton">
+                        <input type="submit" value="Post Media">
+                    </div>
+
+                </form>
             </div>
 
         </div>

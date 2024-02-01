@@ -17,11 +17,52 @@ body {
 
 .PageLinks {
     margin: auto;
-    width: 35%;
+    width: 25%;
     padding-bottom: 30px;
 }
 
 .PageDesc {
     margin: auto;
-    width: 35%;
+    width: 25%;
+    padding-bottom: 30px;
+}
+
+
+/* --- Upload form CSS --- */
+
+.UploadForm {
+    margin: auto;
+    width: 20%;
+    border: 2px;
+    border-style: ridge;
+}
+
+.FormTitle {
+    text-align: center;
+    font-size: large;
+}
+
+.FileUploadBlock {
+    margin: auto;
+    width: 70%;
+    padding-top: 10px;
+}
+
+.CommentBlock {
+    margin: auto;
+    width: 70%;
+    padding-top: 20px;
+}
+
+.RadioButtons {
+    margin: auto;
+    width: 70%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.SubmitButton {
+    margin: auto;
+    width: 70%;
+    padding-bottom: 20px;
 }
