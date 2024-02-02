@@ -33,9 +33,10 @@
         <% import page_mods.upload_service %>
         <% from page_mods.upload_service import * %>
         <% reload(page_mods.upload_service) %>
+        
+        <meta charset="utf-8">
     </head>
     <body>
-        <% upload_data(POST_DATA) %>
-        <%% save_upload() %%>
+        <%% save_data(upload_data(POST_DATA)) %%>
     </body>
 </html>
