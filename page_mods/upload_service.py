@@ -36,7 +36,6 @@ def upload_data(POST_DATA: dict):
         new_file = file(POST_DATA[b'file_data'][0][0][b'filename'], POST_DATA[b'comment'][0][1], True, POST_DATA[b'file_data'][0][0][b'content-type'][1:])
 
     file_extension = mimetypes.guess_extension(new_file.content_type.decode())
-    # TODO handle NONE cases
 
     # put the data into a dir with a unique id
     if new_file.pub:
@@ -56,6 +55,10 @@ def upload_data(POST_DATA: dict):
     # writing to file
     with open(file_obj,'wb') as A6:
         A6.write(POST_DATA[b'file_data'][0][1])
+
+    if file_extension is None:
+        return """<p>Your file has been uploaded but the type of the file was not found</p>
+        <a href="index.html">Go Home</a>"""
 
     return """<p>success. Your file has been uploaded</p>
     <a href="index.html">Go Home</a>"""
