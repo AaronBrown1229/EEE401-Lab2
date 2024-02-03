@@ -17,11 +17,16 @@ class file:
         self.pub = pub
         self.content_type = content_type
 
+'''
+This method is used to upload a file.
+It is ran by upload_service.html to handle the input of a form sent by upload.html
+It will create an instance of the file class with all the information passed to it by the form about the file
+It will then save the file class as a pickle and finally write the file data to the correct directory depending on if it is public or private.
+'''
 # The fallowing is an example of what POST_DATA looks like
 # {b'file_data': [({b'content-type': b' text/plain', b'name': b'file_data', b'filename': b'test.txt'}, b'test\n')], b'comment': [({b'name': b'comment'}, b'hi')], b'pub_or_priv': [({b'name': b'pub_or_priv'}, b'Private')]}
+# NOTE might want to consider if getting a post request that is not of exctype "multipart/form-data"
 def upload_data(POST_DATA: dict):
-    # might want to consider if getting a post request that is not of exctype "multipart/form-data"
-
     # create the class to represent the file
     # NOTE the content type is [1:] because for some reason it gives a space before???
     print(POST_DATA[b'pub_or_priv'][0][1])
