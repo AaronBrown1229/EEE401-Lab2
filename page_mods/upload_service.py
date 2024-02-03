@@ -36,8 +36,15 @@ def upload_data(POST_DATA: dict):
     # put the data into a dir with a unique id
     if new_file.pub:
         file_path = "public_files/" + str(new_file.id) + file_extension
+        pickle_path = "public_pickle" + str(new_file.id) + ".pickle"
     else:
         file_path = "private_files/" + str(new_file.id) + file_extension
+        pickle_path = "private_pickle" + str(new_file.id) + ".pickle"
+
+    pickled_object = pickle.dumps(new_file)
+    # Creates and saves the pickle
+    with open(pickle_path, 'bw') as A5:
+        A5.write(pickled_object)
 
     # calling linux open command
     file_obj = os.open(file_path, os.O_WRONLY | os.O_CREAT, 0o600)
