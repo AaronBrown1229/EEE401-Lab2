@@ -51,3 +51,6 @@ def upload_data(POST_DATA: dict):
     # writing to file
     with open(file_obj,'wb') as A6:
         A6.write(POST_DATA[b'file_data'][0][1])
+
+    return """<p>success. Your file has been uploaded</p>
+    <a href="index.html">Go Home</a>"""
