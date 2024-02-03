@@ -1,8 +1,10 @@
 import pickle
 import os
+import mimetypes
 
 class file:
     def __init__(self, name: bytes,comment: bytes, pub: bool, content_type: bytes):
+        # NOTE might want to make this a random number as then it is even harder for an attacker to find their uploaded file on the server
         file_counter_file = open("file_counter.txt", "r")
         file_counter = int(file_counter_file.read())
         file_counter_file.close()
@@ -21,21 +23,24 @@ def upload_data(POST_DATA: dict):
     # might want to consider if getting a post request that is not of exctype "multipart/form-data"
 
     # create the class to represent the file
-    print(POST_DATA[b'file_data'][0][1])
-    if POST_DATA[b'pub_or_priv'][0][0][b'name'] == b"Private":
-        new_file = file(POST_DATA[b'file_data'][0][0][b'filename'], POST_DATA[b'comment'][0][1], False, POST_DATA[b'file_data'][0][0][b'content-type'])
+    # NOTE the content type is [1:] because for some reason it gives a space before???
+    print(POST_DATA[b'pub_or_priv'][0][1])
+    if POST_DATA[b'pub_or_priv'][0][1] == b'Private':
+        new_file = file(POST_DATA[b'file_data'][0][0][b'filename'], POST_DATA[b'comment'][0][1], False, POST_DATA[b'file_data'][0][0][b'content-type'][1:])
     else:
-        new_file = file(POST_DATA[b'file_data'][0][0][b'filename'], POST_DATA[b'comment'][0][1], True, POST_DATA[b'file_data'][0][0][b'content-type'])
+        new_file = file(POST_DATA[b'file_data'][0][0][b'filename'], POST_DATA[b'comment'][0][1], True, POST_DATA[b'file_data'][0][0][b'content-type'][1:])
+
+    file_extension = mimetypes.guess_extension(new_file.content_type.decode())
+    # TODO handle NONE cases
 
     # put the data into a dir with a unique id
-    return new_file
-    # return the class created for the file
+    if new_file.pub:
+        file_path = "public_files/" + str(new_file.id) + file_extension
+    else:
+        file_path = "private_files/" + str(new_file.id) + file_extension
 
-# This is not finished and just for testing
-def save_data(new_file: file):
-    # this is very unfinished as I am currently confused on what is happening but I will return tomorrow and finish it then
-    if new_file.pub == True:
-        jar = open('public.pickle', 'wb')
-        jar.write(pickle.dumps(new_file))
-    
-    return "<p>Test</p>"
+    # calling linux open command
+    file_obj = os.open(file_path, os.O_WRONLY | os.O_CREAT, 0o600)
+    # writing to file
+    with open(file_obj,'wb') as A6:
+        A6.write(POST_DATA[b'file_data'][0][1])
