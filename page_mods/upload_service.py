@@ -1,10 +1,15 @@
 import pickle
 import os
 import mimetypes
+import time;
+
+
+# --- Create the private and public uploaded file dicts ---
+
 
 class file:
 
-    def __init__(self, name: bytes,comment: bytes, pub: bool, content_type: bytes, file_extension: str):
+    def __init__(self, name: bytes, comment: bytes, pub: bool, content_type: bytes, file_data: bytes, file_extension: str):
 
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
@@ -13,6 +18,8 @@ class file:
         self.comment = comment
         self.pub = pub                  # If true, is public. If false, private. 
         self.content_type = content_type
+        self.file_data = file_data;
+        self.time_uploaded = time.time();
 
 
 def get_file_count():
@@ -36,27 +43,48 @@ def upload_data(POST_DATA: dict):
     save the file class as a pickle and finally write the file data to the correct directory depending on if it is public or 
     private. """
 
+    # TODO - need to create a way that overwrites the old one if uploading with the same name. 
+
+    # --- Create the in program "pickle jars" to store the data pulled-out from the pickle files 
+    PUB_FILES = {};
+    PRIV_FILES = {};
+
+    # Open the pickled files for public and private files and populate our python dicts
+    try: 
+        pub_pickle = open('html/pub_files.pickle', 'rb');
+        PUB_FILES = pickle.loads(pub_pickle.read());
+        pub_pickle.close();
+    except:
+        print("\nCouldn't open [pub_files.pickle]. Likely doesn't exist.")
+    try: 
+        priv_pickle = open('html/priv_files.pickle', 'rb');
+        PRIV_FILES = pickle.loads(priv_pickle.read());
+        priv_pickle.close();
+    except:
+        print("\nCouldn't open [priv_files.pickle]. Likely doesn't exist.")
+
     # Create the class to represent the file. NOTE the content type is [1:] because for some reason it gives a space before???
     file_extension = mimetypes.guess_extension(POST_DATA[b'file_data'][0][0][b'content-type'][1:].decode());
     name = POST_DATA[b'file_data'][0][0][b'filename'];
     comment = POST_DATA[b'comment'][0][1];
     content_type = POST_DATA[b'file_data'][0][0][b'content-type'][1:];
     public = False if POST_DATA[b'pub_or_priv'][0][1] == b'Private' else True;
-    new_file = file(name, comment, public, content_type , file_extension);
+    file_data = POST_DATA[b'file_data'][0][1];
+    new_file = file(name, comment, public, content_type, file_data, file_extension);
 
-    # Specify paths to save uploaded data
-    file_path = ("public_files/" + new_file.id) if public else ("private_files/" + new_file.id);
-    pickle_path = ("public_pickle/" + new_file.id + ".pickle") if public else ("private_pickle/" + new_file.id + ".pickle");
+    # Put the uploaded file into the appropriate dictionary (pickle jar lol)
+    if public:
+        PUB_FILES[name] = new_file;
+    else:
+        PRIV_FILES[name] = new_file;
 
-    # Pickle the uploaded file metadata and save it to a unique file
-    pickled_object = pickle.dumps(new_file)
-    with open(pickle_path, 'bw') as pickle_file:
-        pickle_file.write(pickled_object)
-    
-    # Open (with linux command) a file to save the uploaded file data to and write the data to it. 
-    file_obj = os.open(file_path, os.O_WRONLY | os.O_CREAT, 0o600)
-    with open(file_obj,'wb') as open_file:
-        open_file.write(POST_DATA[b'file_data'][0][1])
+    # Put them pickles back in their jars (their pickle folders)
+    pickled_pub_files = pickle.dumps(PUB_FILES)
+    with open('html/pub_files.pickle', 'bw') as pickle_file:
+        pickle_file.write(pickled_pub_files);
+    pickled_priv_files = pickle.dumps(PRIV_FILES)
+    with open('html/priv_files.pickle', 'bw') as pickle_file:
+        pickle_file.write(pickled_priv_files);
 
     # Return certain html in response indicating status of upload
     if file_extension is None:
