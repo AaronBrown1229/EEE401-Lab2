@@ -19,5 +19,12 @@ import pickle;
 
 # --- Define Functions ---
 
+def pull_public_files():
+    """ This function pulls the public files stored in the pub_files.pickle file. """
+
+    pass; 
+
+
+
 def do_shit():
     print("umm lmao idk do shit I guess lol.");
