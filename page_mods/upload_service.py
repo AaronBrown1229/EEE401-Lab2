@@ -17,10 +17,11 @@ class file:
         self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
         self.name = bleach.clean(name.decode())
         self.comment = bleach.clean(comment.decode())
-        self.pub = bleach.clean(pub)                  # If true, is public. If false, private. 
+        self.pub = pub                  # If true, is public. If false, private. 
         self.content_type = bleach.clean(content_type.decode())
-        self.file_data = bleach.clean(file_data);
-        self.time_uploaded = bleach.clean(time.time());
+        self.file_data = file_data;
+        self.file_extension = bleach.clean(file_extension)
+        self.time_uploaded = time.time();
 
 
 def get_file_count():
