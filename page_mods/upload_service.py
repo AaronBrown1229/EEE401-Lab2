@@ -13,7 +13,7 @@ class file:
 
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
-        self.id = str(get_file_count()) + file_extension
+        self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
         self.name = name
         self.comment = comment
         self.pub = pub                  # If true, is public. If false, private. 
