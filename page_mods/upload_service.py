@@ -59,21 +59,19 @@ def upload_data(POST_DATA: dict):
     file_data = POST_DATA[b'file_data'][0][1];
     new_file = file(name, comment, public, content_type, file_data, file_extension);
     
-    # Open the pickled files for public and private files 
-    if public:
-        pickle_file = open('html/pub_files.pickle', 'rb');
-    else:
-        pickle_file = open('html/priv_files.pickle', 'rb');
-    
-    #populate our python dicts
+    # Open the pickled files for public and private files. Put the uploaded file into the dictionary (pickle jar lol)
     try: 
-        PICKLE_JAR = pickle.loads(pickle_file.read());
-        pickle_file.close();
+        if public:
+            pickle_file = open('html/pub_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(pickle_file.read());
+            pickle_file.close();
+        else:
+            pickle_file = open('html/priv_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(pickle_file.read());
+            pickle_file.close();
     except:
-        print("\nCouldn't open [pub_files.pickle]. Likely doesn't exist.")
-
-    # Put the uploaded file into the dictionary (pickle jar lol)
-    PICKLE_JAR[name] = new_file;
+        print("\nCouldn't open [pub_files.pickle/priv_files.pickle]. Likely doesn't exist.")
+    PICKLE_JAR[new_file.name] = new_file;
 
     # Put them pickles back in their jars (their pickle folders)
     pickled_files = pickle.dumps(PICKLE_JAR)

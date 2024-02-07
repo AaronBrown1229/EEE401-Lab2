@@ -51,9 +51,9 @@
     <!-- Specify header here -->
     <head>
 
-        <% import page_mods.upload_service %>
-        <% from page_mods.upload_service import * %>
-        <% reload(page_mods.upload_service) %>
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
         
 
         <meta charset="utf-8">
@@ -79,6 +79,10 @@
             </div>
 
 
+            <div class="ViewFile">
+
+                <%% pull_public_data(QUERY_VARS) %%>
+            </div>
 
 
         </div>
