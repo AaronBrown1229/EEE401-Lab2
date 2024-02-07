@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- Insert form element here -->
-                <form method="post" action="upload_service.html" excType="multipart/form-data">
+                <form action="upload_service.html" method="post" enctype="multipart/form-data">
 
                     <div class="FileUploadBlock">
                         <label for="file_data">Choose a file to upload:</label>
@@ -83,7 +83,7 @@
                         <legend>Select an upload type:</legend>
                         <div>
                             <!-- The id of this should be either pub or priv-->
-                            <input type="radio" id="priv" name="pub_or_priv" value="Private">
+                            <input type="radio" id="priv" name="pub_or_priv" value="Private" checkeld>
                             <label for="pub_or_priv">Private</label>
                         </div>
                         <div>

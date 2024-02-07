@@ -1,0 +1,10 @@
+/page_mods/__pycache__/
+/test_files/
+/private_files/
+/public_files/
+/page_mods/examples/
+/private_pickle/
+/public_pickle/
+TODO-visco.md
+/html/pub_files.pickle
+/html/priv_files.pickle
