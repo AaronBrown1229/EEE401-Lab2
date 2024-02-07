@@ -29,8 +29,8 @@
 
         <!-- Import browse services -->
         <% import page_mods.browse_services %>
-        <% from page_mods.browser_services import * %>
-        <% reload(page_mods.browser_services) %>
+        <% from page_mods.browse_services import * %>
+        <% reload(page_mods.browse_services) %>
 
         <meta charset="utf-8">
         
@@ -59,6 +59,8 @@
 
             <!-- Iterate through the pickle jar here? We going to use javascript for this? -->
             <div class="PresentFiles">
+
+                <%% pull_public_files() %%>
 
             </div>
 

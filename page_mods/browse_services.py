@@ -14,7 +14,10 @@ Date: 7 Feb 2024
 
 # --- Import Libraries ---
 
-import pickle;
+import pickle
+import os
+import mimetypes
+import time;
 
 
 # --- Define Functions ---
@@ -22,9 +25,26 @@ import pickle;
 def pull_public_files():
     """ This function pulls the public files stored in the pub_files.pickle file. """
 
-    pass; 
+    # Create temporary solution of returning a large string with the uploaded file info 
+    ret_html = "";
+
+    # Open the pickled file for public files and populate our python dict
+    PUB_FILES = {};
+    try: 
+        pub_pickle = open('html/pub_files.pickle', 'rb');
+        PUB_FILES = pickle.loads(pub_pickle.read());
+        pub_pickle.close();
+    except Exception as e:
+        print(f"\nCouldn't open pickle path. Likely doesn't exist. {e}")
+
+    # Iterate through pulled public files and return links to browsePublic.html for them to press and view the file in question. 
+    for file_name, file_data in PUB_FILES.items():
+        ret_html += f"<a href='viewPublic.html?name={file_name}'>{file_name}</a><br>"
+        
+    # Return the html
+    return ret_html;
 
 
-
-def do_shit():
-    print("umm lmao idk do shit I guess lol.");
+# --- MAIN for testing ---
+if __name__ == "__main__":
+    pass;

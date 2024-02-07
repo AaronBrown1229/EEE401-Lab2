@@ -51,6 +51,11 @@
     <!-- Specify header here -->
     <head>
 
+        <% import page_mods.upload_service %>
+        <% from page_mods.upload_service import * %>
+        <% reload(page_mods.upload_service) %>
+        
+
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
@@ -74,7 +79,8 @@
             </div>
 
 
-            <
+
+
         </div>
 
     </body>
