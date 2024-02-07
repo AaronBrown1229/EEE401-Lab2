@@ -46,22 +46,7 @@ def upload_data(POST_DATA: dict):
     # TODO - need to create a way that overwrites the old one if uploading with the same name. 
 
     # --- Create the in program "pickle jars" to store the data pulled-out from the pickle files 
-    PUB_FILES = {};
-    PRIV_FILES = {};
-
-    # Open the pickled files for public and private files and populate our python dicts
-    try: 
-        pub_pickle = open('html/pub_files.pickle', 'rb');
-        PUB_FILES = pickle.loads(pub_pickle.read());
-        pub_pickle.close();
-    except:
-        print("\nCouldn't open [pub_files.pickle]. Likely doesn't exist.")
-    try: 
-        priv_pickle = open('html/priv_files.pickle', 'rb');
-        PRIV_FILES = pickle.loads(priv_pickle.read());
-        priv_pickle.close();
-    except:
-        print("\nCouldn't open [priv_files.pickle]. Likely doesn't exist.")
+    PICKLE_JAR = {};
 
     # Create the class to represent the file. NOTE the content type is [1:] because for some reason it gives a space before???
     file_extension = mimetypes.guess_extension(POST_DATA[b'file_data'][0][0][b'content-type'][1:].decode());
@@ -71,20 +56,31 @@ def upload_data(POST_DATA: dict):
     public = False if POST_DATA[b'pub_or_priv'][0][1] == b'Private' else True;
     file_data = POST_DATA[b'file_data'][0][1];
     new_file = file(name, comment, public, content_type, file_data, file_extension);
-
-    # Put the uploaded file into the appropriate dictionary (pickle jar lol)
+    
+    # Open the pickled files for public and private files 
     if public:
-        PUB_FILES[name] = new_file;
+        pickle_file = open('html/pub_files.pickle', 'rb');
     else:
-        PRIV_FILES[name] = new_file;
+        pickle_file = open('html/priv_files.pickle', 'rb');
+    
+    #populate our python dicts
+    try: 
+        PICKLE_JAR = pickle.loads(pickle_file.read());
+        pickle_file.close();
+    except:
+        print("\nCouldn't open [pub_files.pickle]. Likely doesn't exist.")
+
+    # Put the uploaded file into the dictionary (pickle jar lol)
+    PICKLE_JAR[name] = new_file;
 
     # Put them pickles back in their jars (their pickle folders)
-    pickled_pub_files = pickle.dumps(PUB_FILES)
-    with open('html/pub_files.pickle', 'bw') as pickle_file:
-        pickle_file.write(pickled_pub_files);
-    pickled_priv_files = pickle.dumps(PRIV_FILES)
-    with open('html/priv_files.pickle', 'bw') as pickle_file:
-        pickle_file.write(pickled_priv_files);
+    pickled_files = pickle.dumps(PICKLE_JAR)
+    if public:
+        with open('html/pub_files.pickle', 'bw') as pickle_file:
+            pickle_file.write(pickled_files);
+    else:
+        with open('html/priv_files.pickle', 'bw') as pickle_file:
+            pickle_file.write(pickled_files);
 
     # Return certain html in response indicating status of upload
     if file_extension is None:
