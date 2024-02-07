@@ -2,6 +2,7 @@ import pickle
 import os
 import mimetypes
 import time;
+import bleach;
 
 
 # --- Create the private and public uploaded file dicts ---
@@ -14,12 +15,12 @@ class file:
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
         self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
-        self.name = name
-        self.comment = comment
-        self.pub = pub                  # If true, is public. If false, private. 
-        self.content_type = content_type
-        self.file_data = file_data;
-        self.time_uploaded = time.time();
+        self.name = bleach.clean(name.decode())
+        self.comment = bleach.clean(comment.decode())
+        self.pub = bleach.clean(pub)                  # If true, is public. If false, private. 
+        self.content_type = bleach.clean(content_type.decode())
+        self.file_data = bleach.clean(file_data);
+        self.time_uploaded = bleach.clean(time.time());
 
 
 def get_file_count():
