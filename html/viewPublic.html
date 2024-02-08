@@ -54,12 +54,15 @@
         <% import page_mods.view_services %>
         <% from page_mods.view_services import * %>
         <% reload(page_mods.view_services) %>
+
+        <!-- Flush temp_folder here -->
+        <% flush_temp_folder() %>
         
 
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
-        <link rel="stylesheet" href="./css/viewPublic.css">
+        <link rel="stylesheet" href="./css/view.css">
 
     </head>
 
@@ -82,6 +85,7 @@
             <div class="ViewFile">
 
                 <%% pull_public_data(QUERY_VARS) %%>
+
             </div>
 
 

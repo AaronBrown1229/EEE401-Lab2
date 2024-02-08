@@ -33,6 +33,12 @@
     <!-- Specify header here -->
     <head>
 
+        <!-- First flush the temp folder -->
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
+        <% flush_temp_folder() %>
+
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->

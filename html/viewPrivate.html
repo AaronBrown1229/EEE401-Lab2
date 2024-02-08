@@ -33,10 +33,16 @@
     <!-- Specify header here -->
     <head>
 
+        <!-- First flush the temp folder -->
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
+        <% flush_temp_folder() %>
+
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
-        <link rel="stylesheet" href="./css/index.css">
+        <link rel="stylesheet" href="./css/view.css">
 
     </head>
 
@@ -55,7 +61,10 @@
                 <a href="index.html">Go Home.</a>
             </div>
 
-            <div class="PageText">
+            <div class="ViewFile">
+
+                <%% pull_private_data(QUERY_VARS) %%>
+                
             </div>
 
         </div>

@@ -27,6 +27,12 @@
     <!-- Specify header here -->
     <head>
 
+        <!-- First flush the temp folder -->
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
+        <% flush_temp_folder() %>
+
         <!-- Import browse services -->
         <% import page_mods.browse_services %>
         <% from page_mods.browse_services import * %>
@@ -35,7 +41,7 @@
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
-        <link rel="stylesheet" href="../css/browsePublic.css">
+        <link rel="stylesheet" href="../css/browse.css">
 
     </head>
 
