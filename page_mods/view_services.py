@@ -13,6 +13,7 @@ Date: 7 Feb 2024
 
 import os; 
 import pickle;
+import time;
 
 
 # The fallowing is an example of what POST_DATA looks like
@@ -42,31 +43,24 @@ def pull_public_data(QUERY_VARS):
     # Find the requested file by its name in public files, extract its data
     requested_file = PUB_FILES[requested_name];
     ret_html = f"""
-    <h3>File name: {requested_file.name} </h3>
-    <p>Comment: "{requested_file.comment}" </p>
-    <p>Timestamp: {requested_file.time_uploaded} </p>
+    <p><b>File name</b>: {requested_file.name} </p>
+    <p><b>Comment</b>: "{requested_file.comment}" </p>
+    <p><b>Time Uploaded</b>: {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(requested_file.time_uploaded))} </p>
     """
-    
-    # NOTE: You gotta figure out the logic when you have to download any other file type as well. 
 
+    # Pull the requested file from database, save it temporarily,  
     file_ext = requested_file.name.split('.')[-1];
+    temp_name = f"downloaded-{requested_file.name}"
+    temp_path = f"./html/temp_folder/{temp_name}"
+    with open(temp_path, 'wb') as temp_file:
+        temp_file.write(requested_file.file_data);
+    
+    # If file was an image, also embed an image link to it in html. 
     if file_ext == 'jpeg' or file_ext == 'jpg':
+        ret_html += f'<img src="./temp_folder/{temp_name}" alt="Requested Image" style="width:500px;height:300px">'
 
-        # Pull out the image here, save locally with generic name, include in response
-        dummy_image = open("./html/images/dummy_image.jpeg", 'wb');
-        dummy_image.write(requested_file.file_data);
-        dummy_image.close();
-
-        # Include in return statement
-        ret_html += '<img src="./images/dummy_image.jpg" alt="Requested Image" style="width:500px;height:300px">'
-
-        # Include the link to the image
-        ret_html += '<br><br><a href="./images/dummy_image.jpg" download>Download Image</a>'
-
-    else: 
-
-        # Do shit here for other file types
-        pass;
+    # Include a link to download it in the html.
+    ret_html += f'<br><br><a href="./temp_folder/{temp_name}" download>Download File</a>'
 
     # Return the made html
     return ret_html;

@@ -35,7 +35,7 @@
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
-        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/browsePublic.css">
 
     </head>
 
@@ -60,32 +60,9 @@
             <!-- Iterate through the pickle jar here? We going to use javascript for this? -->
             <div class="PresentFiles">
 
+                <h4>Links to uploaded public files:</h4>
+
                 <%% pull_public_files() %%>
-
-            </div>
-
-            <!-- NOTE: "Safe to say I think this is incorrect... -->
-            <div class="queryForm">
-
-                <!-- NOTE: "I don't exactly know where this request gets sent..."-->
-                <form method="post">
-
-                    <div clas="TitleInput">
-                        <label for="TitleIn">Input the title of a file here:</label>
-                        <input type="text" id="TitleIn" name="TitleIn">
-                    </div>
-
-                    <div clas="FileTypeInput">
-                        <label for="FileTypeIn">Specify the file type:</label>
-                        <select name="FileTypeIn" id="FileTypeIn">
-                            <option value="txt">.txt</option>
-                            <option value="jpg">.jpg</option>
-                            <option value="png">.png</option>
-                        </select>
-                    </div>
-
-
-                </form>
 
             </div>
 
