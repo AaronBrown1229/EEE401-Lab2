@@ -19,7 +19,7 @@ class file:
         self.comment = bleach.clean(comment.decode())
         self.pub = pub                  # If true, is public. If false, private. 
         self.content_type = bleach.clean(content_type.decode())
-        self.file_data = file_data; # TODO This needs to be cleaned. 
+        self.file_data = bleach.clean(file_data.decode()).encode(); # TODO This needs to be cleaned. 
         self.file_extension = bleach.clean(file_extension)
         self.time_uploaded = time.time();
 
