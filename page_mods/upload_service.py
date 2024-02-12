@@ -15,13 +15,26 @@ class file:
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
         self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
-        self.name = bleach.clean(name.decode())
-        self.comment = bleach.clean(comment.decode())
+        self.name = sanitize(name.decode())
+        self.comment = sanitize(comment.decode())
         self.pub = pub                  # If true, is public. If false, private. 
-        self.content_type = bleach.clean(content_type.decode())
-        self.file_data = bleach.clean(file_data.decode()).encode(); # TODO This needs to be cleaned. 
-        self.file_extension = bleach.clean(file_extension)
+        self.content_type = sanitize(content_type.decode())
+        self.file_data = sanitize(file_data.decode()).encode(); # TODO This needs to be cleaned. 
+        self.file_extension = sanitize(file_extension)
         self.time_uploaded = time.time();
+
+"""
+Will sanitize the inputs
+Will remove any of the <%%, <%, %> and, %%> for demowww
+it also runs bleach.clean to sanitize html inputs
+"""
+def sanitize(input: str):
+    input = input.replace(f"<%%",f"/</%/%")
+    input = input.replace(f"<%", f"/</%")
+    input = input.replace(f"%%>", f"/%/%/>")
+    input = input.replace(f"%>", "/%/>")
+    bleach.clean(input)
+    return input
 
 
 def get_file_count():
