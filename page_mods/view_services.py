@@ -11,6 +11,7 @@ Date: 7 Feb 2024
 
 # --- Importing libraries ---
 
+import subprocess;
 import os; 
 import pickle;
 import time;
@@ -42,10 +43,11 @@ def pull_public_data(QUERY_VARS):
     
     # Find the requested file by its name in public files, extract its data
     requested_file = PUB_FILES[requested_name];
+    cowsay_comment = subprocess.run(f"cowsay {requested_file.comment}", shell = True, capture_output = True).stdout.decode();
     ret_html = f"""
     <p><b>File name</b>: {requested_file.name} </p>
-    <p><b>Comment</b>: "{requested_file.comment}" </p>
     <p><b>Time Uploaded</b>: {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(requested_file.time_uploaded))} </p>
+    <p><b>Cowsay Comment</b>:<pre>{cowsay_comment}</pre><br></p> 
     """
 
     # Pull the requested file from database, save it temporarily,  
@@ -92,10 +94,11 @@ def pull_private_data(QUERY_VARS):
     
     # Find the requested file by its name in public files, extract its data
     requested_file = PRIV_FILES[requested_name];
+    cowsay_comment = subprocess.run(f"cowsay {requested_file.comment}", shell = True, capture_output = True).stdout.decode();
     ret_html = f"""
     <p><b>File name</b>: {requested_file.name} </p>
-    <p><b>Comment</b>: "{requested_file.comment}" </p>
     <p><b>Time Uploaded</b>: {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(requested_file.time_uploaded))} </p>
+    <p><b>Cowsay Comment</b>:<pre>{cowsay_comment}</pre><br></p> 
     """
 
     # Pull the requested file from database, save it temporarily,  
