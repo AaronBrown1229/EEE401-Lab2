@@ -47,7 +47,8 @@ def pull_public_data(QUERY_VARS):
     ret_html = f"""
     <p><b>File name</b>: {requested_file.name} </p>
     <p><b>Time Uploaded</b>: {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(requested_file.time_uploaded))} </p>
-    <p><b>Cowsay Comment</b>:<pre>{cowsay_comment}</pre><br></p> 
+    <p><b>Comment</b>:{requested_file.comment}<br></p> 
+    <p><pre>{cowsay_comment}</pre><br></p> 
     """
 
     # Pull the requested file from database, save it temporarily,  
@@ -98,7 +99,8 @@ def pull_private_data(QUERY_VARS):
     ret_html = f"""
     <p><b>File name</b>: {requested_file.name} </p>
     <p><b>Time Uploaded</b>: {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(requested_file.time_uploaded))} </p>
-    <p><b>Cowsay Comment</b>:<pre>{cowsay_comment}</pre><br></p> 
+    <p><b>Comment</b>:{requested_file.comment}<br></p> 
+    <p><pre>{cowsay_comment}</pre><br></p> 
     """
 
     # Pull the requested file from database, save it temporarily,  
