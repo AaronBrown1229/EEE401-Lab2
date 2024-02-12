@@ -29,10 +29,10 @@ Will remove any of the <%%, <%, %> and, %%> for demowww
 it also runs bleach.clean to sanitize html inputs
 """
 def sanitize(input: str):
-    input = input.replace(f"<%%",f"/</%/%")
-    input = input.replace(f"<%", f"/</%")
-    input = input.replace(f"%%>", f"/%/%/>")
-    input = input.replace(f"%>", "/%/>")
+    input = input.replace(f"<%%",f"&lt;&#37;&#37;")
+    input = input.replace(f"<%", f"&lt;&#37;")
+    input = input.replace(f"%%>", f"&#37;&#37;&gt;")
+    input = input.replace(f"%>", "&#37;&gt;")
     bleach.clean(input)
     return input
 
