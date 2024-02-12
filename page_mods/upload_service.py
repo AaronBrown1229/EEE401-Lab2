@@ -19,10 +19,11 @@ class file:
         self.comment = sanitize(comment.decode())
         self.pub = pub                  # If true, is public. If false, private. 
         self.content_type = sanitize(content_type.decode())
-        if file_extension == ".jpg" or file_extension == ".jpeg":
-            self.file_data = file_data
-        else:
+        try:
             self.file_data = sanitize(file_data.decode()).encode(); # TODO This needs to be cleaned. 
+        except:
+            self.file_data = file_data
+            print(self.name + " could not be sanitized")
         self.file_extension = sanitize(file_extension)
         self.time_uploaded = time.time();
 
