@@ -3,6 +3,7 @@ import os
 import mimetypes
 import time;
 import bleach;
+import magic
 
 
 # --- Create the private and public uploaded file dicts ---
@@ -14,7 +15,7 @@ class file:
 
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
-        self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
+        self.id = str(get_file_count())# NOTE "I don't think we need this one anymore."" 
         self.name = sanitize(name.decode())
         self.comment = sanitize(comment.decode())
         self.pub = pub                  # If true, is public. If false, private. 
@@ -24,7 +25,8 @@ class file:
         except:
             self.file_data = file_data
             print(self.name + " could not be sanitized")
-        self.file_extension = sanitize(file_extension)
+        # TODO look into magic
+        self.file_extension = sanitize(file_extension) if file_extension is not None else ""
         self.time_uploaded = time.time();
 
 """
@@ -68,12 +70,12 @@ def upload_data(POST_DATA: dict):
     PICKLE_JAR = {};
 
     # Create the class to represent the file. NOTE the content type is [1:] because for some reason it gives a space before???
-    file_extension = mimetypes.guess_extension(POST_DATA[b'file_data'][0][0][b'content-type'][1:].decode());
     name = POST_DATA[b'file_data'][0][0][b'filename'];
     comment = POST_DATA[b'comment'][0][1];
     content_type = POST_DATA[b'file_data'][0][0][b'content-type'][1:];
     public = False if POST_DATA[b'pub_or_priv'][0][1] == b'Private' else True;
     file_data = POST_DATA[b'file_data'][0][1];
+    file_extension = mimetypes.guess_extension(magic.from_buffer(file_data, mime=True))
     new_file = file(name, comment, public, content_type, file_data, file_extension);
     
     # Open the pickled files for public and private files. Put the uploaded file into the dictionary (pickle jar lol)
