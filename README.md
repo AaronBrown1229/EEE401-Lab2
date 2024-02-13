@@ -7,6 +7,7 @@ The goal of this lab is to develop a secure web application that can be used to 
 * Uses OS library
 * Uses pickle library to store the file metadata
 * bleach to sanitize inputs
+* magic to check the type of file
 
 # Directories to create
 Must create private_files, private_pickle, public_files and, public_pickle directory within the application root directory.
