@@ -17,9 +17,6 @@ import pickle;
 import time;
 
 
-# The fallowing is an example of what POST_DATA looks like
-# {b'file_data': [({b'content-type': b' text/plain', b'name': b'file_data', b'filename': b'test.txt'}, b'test\n')], b'comment': [({b'name': b'comment'}, b'hi')], b'pub_or_priv': [({b'name': b'pub_or_priv'}, b'Private')]}
-
 # --- Defining Functions ---
 
 def pull_public_data(QUERY_VARS):
