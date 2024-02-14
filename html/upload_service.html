@@ -29,6 +29,13 @@
 <!DOCTYPE html> 
 <html lang="en">
     <head>
+
+        <!-- First flush the temp folder -->
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
+        <% flush_temp_folder() %>
+
         <!-- In the example given this code is in the head but in the wight board code this is in the body-->
         <% import page_mods.upload_service %>
         <% from page_mods.upload_service import * %>

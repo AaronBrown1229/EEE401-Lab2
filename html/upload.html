@@ -33,6 +33,12 @@
     <!-- Specify header here -->
     <head>
 
+        <!-- First flush the temp folder -->
+        <% import page_mods.view_services %>
+        <% from page_mods.view_services import * %>
+        <% reload(page_mods.view_services) %>
+        <% flush_temp_folder() %>
+
         <meta charset="utf-8">
         
         <!-- Insert CSS file path here -->
@@ -83,7 +89,7 @@
                         <legend>Select an upload type:</legend>
                         <div>
                             <!-- The id of this should be either pub or priv-->
-                            <input type="radio" id="priv" name="pub_or_priv" value="Private" checkeld>
+                            <input type="radio" id="priv" name="pub_or_priv" value="Private" checked>
                             <label for="pub_or_priv">Private</label>
                         </div>
                         <div>

@@ -1,0 +1,35 @@
+
+
+body {
+    background-color: bisque;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+.OuterDiv {
+    width: 100%;
+}
+
+.PageTitle {
+    margin: auto;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.PageLinks {
+    margin: auto;
+    width: 25%;
+    padding-bottom: 30px;
+}
+
+.PageDesc {
+    margin: auto;
+    width: 25%;
+    padding-bottom: 30px;
+}
+
+.PresentFiles {
+    margin: auto;
+    width: 25%;
+    
+}

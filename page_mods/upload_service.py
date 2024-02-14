@@ -3,6 +3,7 @@ import os
 import mimetypes
 import time;
 import bleach;
+import magic
 
 
 # --- Create the private and public uploaded file dicts ---
@@ -14,14 +15,32 @@ class file:
 
         # NOTE might want to make this a random number as then it is # even harder for an 
         # attacker to find their uploaded file on the server the actual file name.
-        self.id = str(get_file_count()) + file_extension # NOTE "I don't think we need this one anymore."" 
-        self.name = bleach.clean(name.decode())
-        self.comment = bleach.clean(comment.decode())
+        self.id = str(get_file_count())# NOTE "I don't think we need this one anymore."" 
+        self.name = sanitize(name.decode())
+        self.comment = sanitize(comment.decode())
         self.pub = pub                  # If true, is public. If false, private. 
-        self.content_type = bleach.clean(content_type.decode())
-        self.file_data = bleach.clean(file_data.decode()).encode();
-        self.file_extension = bleach.clean(file_extension)
+        self.content_type = sanitize(content_type.decode())
+        try:
+            self.file_data = sanitize(file_data.decode()).encode(); # TODO This needs to be cleaned. 
+        except:
+            self.file_data = file_data
+            print(self.name + " could not be sanitized")
+        # TODO look into magic
+        self.file_extension = sanitize(file_extension) if file_extension is not None else ""
         self.time_uploaded = time.time();
+
+"""
+Will sanitize the inputs
+Will remove any of the <%%, <%, %> and, %%> for demowww
+it also runs bleach.clean to sanitize html inputs
+"""
+def sanitize(input: str):
+    input = input.replace(f"<%%",f"&lt;&#37;&#37;")
+    input = input.replace(f"<%", f"&lt;&#37;")
+    input = input.replace(f"%%>", f"&#37;&#37;&gt;")
+    input = input.replace(f"%>", "&#37;&gt;")
+    bleach.clean(input)
+    return input
 
 
 def get_file_count():
@@ -51,29 +70,27 @@ def upload_data(POST_DATA: dict):
     PICKLE_JAR = {};
 
     # Create the class to represent the file. NOTE the content type is [1:] because for some reason it gives a space before???
-    file_extension = mimetypes.guess_extension(POST_DATA[b'file_data'][0][0][b'content-type'][1:].decode());
     name = POST_DATA[b'file_data'][0][0][b'filename'];
     comment = POST_DATA[b'comment'][0][1];
     content_type = POST_DATA[b'file_data'][0][0][b'content-type'][1:];
     public = False if POST_DATA[b'pub_or_priv'][0][1] == b'Private' else True;
     file_data = POST_DATA[b'file_data'][0][1];
+    file_extension = mimetypes.guess_extension(magic.from_buffer(file_data, mime=True))
     new_file = file(name, comment, public, content_type, file_data, file_extension);
     
-    # Open the pickled files for public and private files 
-    if public:
-        pickle_file = open('html/pub_files.pickle', 'rb');
-    else:
-        pickle_file = open('html/priv_files.pickle', 'rb');
-    
-    #populate our python dicts
+    # Open the pickled files for public and private files. Put the uploaded file into the dictionary (pickle jar lol)
     try: 
-        PICKLE_JAR = pickle.loads(pickle_file.read());
-        pickle_file.close();
+        if public:
+            pickle_file = open('html/pub_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(pickle_file.read());
+            pickle_file.close();
+        else:
+            pickle_file = open('html/priv_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(pickle_file.read());
+            pickle_file.close();
     except:
-        print("\nCouldn't open [pub_files.pickle]. Likely doesn't exist.")
-
-    # Put the uploaded file into the dictionary (pickle jar lol)
-    PICKLE_JAR[name] = new_file;
+        print("\nCouldn't open [pub_files.pickle/priv_files.pickle]. Likely doesn't exist.")
+    PICKLE_JAR[new_file.name] = new_file;
 
     # Put them pickles back in their jars (their pickle folders)
     pickled_files = pickle.dumps(PICKLE_JAR)
