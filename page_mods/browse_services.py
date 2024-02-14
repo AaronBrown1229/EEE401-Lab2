@@ -3,8 +3,10 @@
 
 Description: 
 
-    Uhh sup y'all I don't exactly know how I'm going to use this file yet but lmfao
-    I guess we'll just set it up here for now. 
+    This file contains the python logic that retrieves the links to the public and private
+    uploaded files from the pickle jar and returns html links to them to the calling web
+    page. 
+
 
 Author: OCdt Brown and OCdt Velasco
 Date: 7 Feb 2024
@@ -21,6 +23,46 @@ import time;
 
 
 # --- Define Functions ---
+
+def retrieve_file_links(public):
+    """ This function returns links to the private/public files in the database. """
+
+    # Create temporary solution of returning a large string with the uploaded file info 
+    ret_html = "";
+    PICKLE_JAR = {}; 
+
+    if public: 
+
+        try: 
+            pub_pickle = open('html/pub_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(pub_pickle.read());
+            pub_pickle.close();
+        except Exception as e:
+            print(f"\nCouldn't open pickle path. Likely doesn't exist. {e}")
+
+    else: 
+
+        try: 
+            priv_pickle = open('html/priv_files.pickle', 'rb');
+            PICKLE_JAR = pickle.loads(priv_pickle.read());
+            priv_pickle.close();
+        except Exception as e:
+            print(f"\nCouldn't open pickle path. Likely doesn't exist. {e}")
+    
+    # Check if the pickle jar was empty
+    if len(PICKLE_JAR) == 0: 
+        return "<p>There are currently no uploaded files here.";
+
+    # Iterate through pulled files and return links to appropriate html page 
+    # for the user to view the links from. 
+    for file_name, file_data in PICKLE_JAR.items():
+        if public: 
+            ret_html += f"<a href='viewPublic.html?name={file_name}'>{file_name}</a><br>"
+        else: 
+            ret_html += f"<a href='viewPrivate.html?name={file_name}'>{file_name}</a><br>"
+
+    # return the HTML
+    return ret_html; 
 
 def pull_public_files():
     """ This function pulls the public files stored in the pub_files.pickle file. """
@@ -68,6 +110,3 @@ def pull_private_files():
     return ret_html;
 
 
-# --- MAIN for testing ---
-if __name__ == "__main__":
-    pass;

@@ -1,3 +1,11 @@
+"""
+
+    The fallowing is an example of what POST_DATA looks like
+    {b'file_data': [({b'content-type': b' text/plain', b'name': b'file_data', b'filename': b'test.txt'}, b'test\n')], b'comment': [({b'name': b'comment'}, b'hi')], b'pub_or_priv': [({b'name': b'pub_or_priv'}, b'Private')]}
+    NOTE might want to consider if getting a post request that is not of exctype "multipart/form-data"
+
+"""
+
 import pickle
 import os
 import mimetypes
@@ -11,51 +19,28 @@ import magic
 
 class file:
 
-    def __init__(self, name: bytes, comment: bytes, pub: bool, content_type: bytes, file_data: bytes, file_extension: str):
+    def __init__(self, name: bytes, comment: bytes, pub: bool, file_data: bytes, file_extension: str):
 
-        # NOTE might want to make this a random number as then it is # even harder for an 
-        # attacker to find their uploaded file on the server the actual file name.
-        self.id = str(get_file_count())# NOTE "I don't think we need this one anymore."" 
-        self.name = sanitize(name.decode())
         self.comment = sanitize(comment.decode())
-        self.pub = pub                  # If true, is public. If false, private. 
-        self.content_type = sanitize(content_type.decode())
-        try:
-            self.file_data = sanitize(file_data.decode()).encode(); # TODO This needs to be cleaned. 
-        except:
-            self.file_data = file_data
-            print(self.name + " could not be sanitized")
-        # TODO look into magic
+        self.name = sanitize(name.decode()); 
+        self.pub = pub                              # If true, is public. If false, private. 
         self.file_extension = sanitize(file_extension) if file_extension is not None else ""
         self.time_uploaded = time.time();
+        try:
+            self.file_data = sanitize(file_data.decode()).encode(); 
+        except:
+            self.file_data = file_data;
+            print(self.name + " could not be sanitized");
 
-"""
-Will sanitize the inputs
-Will remove any of the <%%, <%, %> and, %%> for demowww
-it also runs bleach.clean to sanitize html inputs
-"""
+
 def sanitize(input: str):
-    input = input.replace(f"<%%",f"&lt;&#37;&#37;")
-    input = input.replace(f"<%", f"&lt;&#37;")
-    input = input.replace(f"%%>", f"&#37;&#37;&gt;")
-    input = input.replace(f"%>", "&#37;&gt;")
-    bleach.clean(input)
-    return input
-
-
-def get_file_count():
-    """ Returns the next file number to label the uploaded file. """
-
-    file_counter = None;
-    with open("file_counter.txt", "r") as open_file:
-        file_counter = int(open_file.read());
-    with open("file_counter.txt", "r+") as write_file:
-        write_file.write(str(file_counter + 1));
-    return file_counter;
-
-# The fallowing is an example of what POST_DATA looks like
-# {b'file_data': [({b'content-type': b' text/plain', b'name': b'file_data', b'filename': b'test.txt'}, b'test\n')], b'comment': [({b'name': b'comment'}, b'hi')], b'pub_or_priv': [({b'name': b'pub_or_priv'}, b'Private')]}
-# NOTE might want to consider if getting a post request that is not of exctype "multipart/form-data"
+    """ Sanitizes the string inputted through the argments."""
+    input = input.replace(f"<%%",f"&lt;&#37;&#37;");
+    input = input.replace(f"<%", f"&lt;&#37;");
+    input = input.replace(f"%%>", f"&#37;&#37;&gt;");
+    input = input.replace(f"%>", "&#37;&gt;");
+    bleach.clean(input);
+    return input;
 
 
 def upload_data(POST_DATA: dict):
@@ -64,19 +49,16 @@ def upload_data(POST_DATA: dict):
     save the file class as a pickle and finally write the file data to the correct directory depending on if it is public or 
     private. """
 
-    # TODO - need to create a way that overwrites the old one if uploading with the same name. 
-
     # --- Create the in program "pickle jars" to store the data pulled-out from the pickle files 
     PICKLE_JAR = {};
 
     # Create the class to represent the file. NOTE the content type is [1:] because for some reason it gives a space before???
     name = POST_DATA[b'file_data'][0][0][b'filename'];
     comment = POST_DATA[b'comment'][0][1];
-    content_type = POST_DATA[b'file_data'][0][0][b'content-type'][1:];
     public = False if POST_DATA[b'pub_or_priv'][0][1] == b'Private' else True;
     file_data = POST_DATA[b'file_data'][0][1];
-    file_extension = mimetypes.guess_extension(magic.from_buffer(file_data, mime=True))
-    new_file = file(name, comment, public, content_type, file_data, file_extension);
+    file_extension = mimetypes.guess_extension(magic.from_buffer(file_data, mime=True)) # magic library helps determine the file type depending on its data. 
+    new_file = file(name, comment, public, file_data, file_extension);
     
     # Open the pickled files for public and private files. Put the uploaded file into the dictionary (pickle jar lol)
     try: 
@@ -109,6 +91,6 @@ def upload_data(POST_DATA: dict):
         """
     else: 
         return f"""
-            <p>success. Your file has been uploaded.</p>
+            <p>Success. Your file has been uploaded.</p>
             <a href="index.html">Go Home</a>
         """
