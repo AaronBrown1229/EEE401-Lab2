@@ -35,10 +35,10 @@ class file:
 
 def sanitize(input: str):
     """ Sanitizes the string inputted through the argments."""
-    input = input.replace(f"<%%",f"\&lt;\&#37;\&#37;");
-    input = input.replace(f"<%", f"\&lt;\&#37;");
-    input = input.replace(f"%%>", f"\&#37;\&#37;\&gt;");
-    input = input.replace(f"%>", "\&#37;\&gt;");
+    input = input.replace(f"<%%",f"&lt&#37&#37");
+    input = input.replace(f"<%", f"&lt&#37");
+    input = input.replace(f"%%>", f"&#37&#37&gt");
+    input = input.replace(f"%>", "&#37&gt");
     
     # sanitizes bash commands
     input = input.replace(f"&", f"\&")

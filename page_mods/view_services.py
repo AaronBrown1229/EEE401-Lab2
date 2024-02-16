@@ -61,6 +61,7 @@ def pull_data(QUERY_VARS, public):
         requested_file = PICKLE_JAR[requested_name];
 
     # Find the requested file by its name in public files, extract its data
+    print(requested_file.comment)
     cowsay_comment = subprocess.run(f"cowsay {requested_file.comment}", shell = True, capture_output = True).stdout.decode();
     ret_html = f"""
     <p><b>File name</b>: {requested_file.name} </p>
